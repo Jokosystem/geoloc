@@ -25,7 +25,7 @@ h1 {
   color: #333;
 }
 
-#address-input {
+#address-input, #route-button-walk {
   margin-bottom: 20px;
 }
 
@@ -38,10 +38,11 @@ h1 {
   <h3>Entrez une adresse :</h3>
   <input type="text" id="address-input" placeholder="Entrez une adresse">
   <button id="locate-button">ME LOCALISER</button>
+  </br>
   <button id="route-button-car">Itineraire en voiture</button>
-  <button id="route-button-walk">Itineraire a pied</button>
-  <button id="route-button-bike">Itineraire a velo</button>
   <button id="route-button-transit">Itineraire en transports en commun</button>
+  <button id="route-button-bike">Itineraire a velo</button>
+  <button id="route-button-walk">Itineraire a pied</button>
   <div id="map"></div>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBA4ONxjKbF_2UZoC4zkEoSVLnYbRH944g&callback=initMap" async defer></script>
   <script src="script.js"></script>
