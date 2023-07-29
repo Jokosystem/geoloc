@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Application de geolocalisation</title>
+  <style>
+    /* Ajoutez ici vos styles CSS personnalisés */
+        /* Ajoutez ici vos styles CSS personnalisés */
+    /* Stylisation de la carte */
+h1 {
+  text-align: center;
+}
+#map {
+  width: 100%; /* Largeur de la carte, par exemple 100% de la largeur de la fenêtre */
+  height: 600px; /* Hauteur de la carte, par exemple 400 pixels */
+  border: 1px solid #ccc; /* Bordure de la carte */
+  border-radius: 5px; /* Coins arrondis de la carte */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre portée pour la carte */
+}
+
+/* Stylisation du texte à l'intérieur de la carte */
+#map h1 {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: #333;
+}
+
+#address-input {
+  margin-bottom: 20px;
+}
+
+/* Autres styles personnalisés pour la carte */
+/* Par exemple, vous pouvez ajuster les couleurs, polices, etc. selon vos préférences */
+  </style>
+</head>
+<body>
+  <h1>Application de geolocalisation</h1>
+  <h3>Entrez une adresse :</h3>
+  <input type="text" id="address-input" placeholder="Entrez une adresse">
+  <button id="locate-button">ME LOCALISER</button>
+  <button id="route-button-car">Itineraire en voiture</button>
+  <button id="route-button-walk">Itineraire a pied</button>
+  <button id="route-button-bike">Itineraire a velo</button>
+  <button id="route-button-transit">Itineraire en transports en commun</button>
+  <div id="map"></div>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBA4ONxjKbF_2UZoC4zkEoSVLnYbRH944g&callback=initMap" async defer></script>
+  <script src="script.js"></script>
+</body>
+</html>
