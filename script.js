@@ -55,13 +55,13 @@ function geocodeAddress() {
         var marker = new google.maps.Marker({
           map: map,
           position: userLocation,
-          title: 'Vous êtes ici'
+          title: 'Vous etes ici'
         });
       }, function () {
-        alert("Impossible de récupérer votre position actuelle.");
+        alert("Impossible de recuperer votre position actuelle.");
       });
     } else {
-      alert("La géolocalisation n'est pas prise en charge par ce navigateur.");
+      alert("La geolocalisation n'est pas prise en charge par ce navigateur.");
     }
   });
 
@@ -89,24 +89,7 @@ function geocodeAddress() {
     calculateRoute('TRANSIT');
   });
 
-
-// Fonction pour géocoder l'adresse saisie par l'utilisateur
-function geocodeAddress() {
-  var address = document.getElementById('address-input').value;
-
-  geocoder.geocode({ 'address': address }, function (results, status) {
-    if (status === 'OK') {
-      map.setCenter(results[0].geometry.location);
-      var marker = new google.maps.Marker({
-        map: map,
-        position: results[0].geometry.location,
-        title: 'Adresse trouvée'
-      });
-    } else {
-      alert('Impossible de trouver l\'adresse : ' + status);
-    }
-  });
-}
+  
 
 // Fonction pour calculer l'itinéraire avec différentes options de voyage
 function calculateRoute(travelMode) {
@@ -126,14 +109,14 @@ function calculateRoute(travelMode) {
         if (status == 'OK') {
           directionsRenderer.setDirections(result);
         } else {
-          alert('Impossible de calculer l\'itinéraire : ' + status);
+          alert('Impossible de calculer l\'itineraire : ' + status);
         }
       });
     }, function () {
-      alert("Impossible de récupérer votre position actuelle.");
+      alert("Impossible de recuperer votre position actuelle.");
     });
   } else {
-    alert("La géolocalisation n'est pas prise en charge par ce navigateur.");
+    alert("La geolocalisation n'est pas prise en charge par ce navigateur.");
   }
 }
 
