@@ -120,6 +120,41 @@ function calculateRoute(travelMode) {
   }
 }
 
+const mysql = require('mysql');
+
+// Configurer les informations de connexion à la base de données
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'geoloc'
+});
+
+// Se connecter à la base de données
+connection.connect((err) => {
+  if (err) throw err;
+  console.log('Connecté à la base de données MySQL');
+});
+
+// Exemple d'insertion de données dans la table "locations"
+const latitude = 48.858844;
+const longitude = 2.294351;
+const adresse = 'Paris, France';
+
+const sql = 'INSERT INTO locations (latitude, longitude, adresse) VALUES (?, ?, ?)';
+const values = [latitude, longitude, adresse];
+
+connection.query(sql, values, (err, result) => {
+  if (err) throw err;
+  console.log('Données insérées avec succès !');
+});
+
+// Fermer la connexion à la base de données
+connection.end((err) => {
+  if (err) throw err;
+  console.log('Déconnecté de la base de données MySQL');
+});
+
 
 
 
