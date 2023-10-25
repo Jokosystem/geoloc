@@ -9,6 +9,7 @@
 body {
   background-color: #333;
   background-image: url(./nexus.jpg);
+  text-align: center;
 }
 h1 {
   text-align: center;
@@ -37,13 +38,15 @@ img {
   color: aliceblue;
 }
 
-h3 {
+h2 {
   color: aliceblue;
 }
 
 #address-input {
   margin-bottom: 15px;
   border: 2px solid blue;
+  padding: 8px;
+  width: 95%;
 }
 
 button {
@@ -52,6 +55,31 @@ button {
   margin-bottom: 15px;
   
 }
+
+.info-box {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+}
+
+/* Styles spécifiques pour les éléments de l'info-box */
+.info-box h2 {
+  font-size: 1.2em;
+  margin: 0;
+}
+
+.info-box p {
+  font-size: 1em;
+  margin: 0;
+}
+
+.info-box {
+      background-color: #fff;
+      border: 2px solid blue;
+      padding: 10px;
+      margin: 10px;
+    }
 
 footer {
   color: #fff;
@@ -66,16 +94,28 @@ footer {
 </head>
 <body>
   <h1>Geolook</h1>
-  <h3>Localisez-vous<br>puis entrez une destination :</h3>
-  <input type="text" id="address-input" placeholder="Entrez une adresse">
+  <h2>Localisez-vous<br>puis entrez une destination :</h2>
   <button id="locate-button"><img src="./location.png" alt="icon_location"><br>ME LOCALISER</button>
-  <h3>Mode de transport</h3>
+  <input type="text" id="address-input" placeholder="Entrez une adresse puis appuyez sur la touche ENTREE">
+  <h2>Mode de transport</h2>
   <button id="route-button-car"><img src="./car.png" alt="icon_car"><br>En voiture</button>
   <button id="route-button-transit"><img src="./bus.png" alt="icon_bus"><br>En transport</button>
   <button id="route-button-bike"><img src="./bike.png" alt="icon_bike"><br>En 2 Roues</button>
   <button id="route-button-walk"><img src="./walk.png" alt="icon_walk"><br>A pied</button>
   <div id="map"></div>
-  <script src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap" async defer></script>
+  <div class="info-box" id="time-info">
+    <h3>Temps de trajet</h3>
+    <p id="time-text">-</p>
+  </div>
+  <div class="info-box" id="traffic-info">
+    <h3>Etat du trafic</h3>
+    <p id="traffic-text">-</p>
+  </div>
+  <div class="info-box" id="transit-info">
+    <h3>Horaires de transport en commun</h3>
+    <p id="transit-text">-</p>
+  </div>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBA4ONxjKbF_2UZoC4zkEoSVLnYbRH944g&callback=initMap" async defer></script>
   <script src="script.js"></script>
   <footer>
     &copy; Geolook by Jock 2023

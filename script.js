@@ -120,6 +120,7 @@ function calculateRoute(travelMode) {
   }
 }
 
+
 const mysql = require('mysql');
 
 // Configurer les informations de connexion à la base de données
@@ -157,6 +158,3 @@ connection.end((err) => {
 
 
 
-
-
- 
