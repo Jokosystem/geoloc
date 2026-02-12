@@ -1,129 +1,161 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-  <title>Geolook</title>
+  <meta charset="UTF-8">
+  <title>GeoLook by Jock</title>
+
   <style>
-    /* Ajoutez ici vos styles CSS personnalisés */
-        /* Ajoutez ici vos styles CSS personnalisés */
-    /* Stylisation de la carte */
-body {
-  background-color: #333;
-  background-image: url(./nexus.jpg);
-  text-align: center;
-}
-
-
-
-h1 {
-  text-align: center;
-  color: aliceblue;
-  font-size: 100px;
-}
-
-img {
-  width: 30px;
-  height: 30px;
-  margin: 10px;
-}
-
-#map {
-  width: 100%; /* Largeur de la carte, par exemple 100% de la largeur de la fenêtre */
-  height: 600px; /* Hauteur de la carte, par exemple 400 pixels */
-  border: 2px solid blue; /* Bordure de la carte */
-  border-radius: 5px; /* Coins arrondis de la carte */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre portée pour la carte */
-}
-
-/* Stylisation du texte à l'intérieur de la carte */
-#map h1 {
-  text-align: center;
-  margin-bottom: 10px;
-  font-size: 20px;
-  color: aliceblue;
-}
-
-h2 {
-  color: aliceblue;
-}
-
-#address-input {
-  margin-bottom: 15px;
-  border: 2px solid blue;
-  border-radius: 8px 8px 8px 8px;
-  padding: 8px;
-  width: 50%;
-  text-align: center;
-}
-
-button {
-  border: 2px solid blue;
-  border-radius: 5px 5px 5px 5px;
-  margin-bottom: 15px;
-  
-}
-
-.info-box {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin: 10px;
-}
-
-/* Styles spécifiques pour les éléments de l'info-box */
-.info-box h2 {
-  font-size: 1.2em;
-  margin: 0;
-}
-
-.info-box p {
-  font-size: 1em;
-  margin: 0;
-}
-
-.info-box {
-      background-color: #fff;
-      border: 2px solid blue;
-      padding: 10px;
-      margin: 10px;
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #333 url("./grungebg.jpg");
+      color: white;
+      text-align: center;
     }
 
-footer {
-  color: #fff;
-  padding: 1rem;
-  text-align: center;
-  font-size: 30px;
-}
+    h1 {
+      font-size: 80px;
+      margin: 20px 0 10px;
+    }
 
+    h2 {
+      margin: 10px 0;
+      color: aliceblue;
+    }
+
+    details {
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    img {
+        color: black;
+      width: 28px;
+      height: 28px;
+      margin-bottom: 5px;
+    }
+
+    #controls {
+      margin-bottom: 15px;
+    }
+
+    #address-input {
+      width: 60%;
+      max-width: 400px;
+      padding: 10px;
+      border: 2px solid #2196f3;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 16px;
+      margin: 10px 0;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 75px;
+    }
+
+    button {
+      background: white;
+      border: 2px solid #2196f3;
+      border-radius: 8px;
+      padding: 10px 15px;
+      cursor: pointer;
+      min-width: 120px;
+    }
+
+    button:hover {
+      background: #2196f3;
+    }
+
+    #map {
+      width: 98%;
+      height: 600px;
+      margin: 10px auto;
+      border: 3px solid #2196f3;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+
+    #transit-info {
+      max-width: 600px;
+      margin: 15px auto;
+      background: rgba(0,0,0,0.7);
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .line {
+      margin-bottom: 8px;
+    }
+
+    footer {
+      margin-top: 15px;
+      padding: 10px;
+      font-size: 20px;
+      opacity: 0.8;
+    }
   </style>
 </head>
+
 <body>
-  <h1>Geolook</h1>
-  <h2>Localisez-vous<br>puis entrez une destination :</h2>
-  <button id="locate-button"><img src="./location.png" alt="icon_location"><br>ME LOCALISER</button>
-  <br>
-  <input type="text" id="address-input" placeholder="Entrez une adresse ou une destination puis appuyez sur la touche ENTREE">
+
+  <h1>GeoLook</h1>
+  <h2>Localisez-vous puis entrez une destination</h2>
+
+  <details>
+    <summary>Comment ça marche</summary>
+    Cliquez sur "Me localiser", puis entrez votre destination pour obtenir un itinéraire.
+  </details>
+
+  <div id="controls">
+    <button id="locate-button">
+      <img src="location.png" alt="">
+      <br>Me localiser
+    </button>
+
+    <br>
+
+    <input id="address-input" type="text" placeholder="Entrez une adresse ou une destination">
+  </div>
+
   <h2>Mode de transport</h2>
-  <button id="route-button-car"><img src="./car.png" alt="icon_car"><br>En voiture</button>
-  <button id="route-button-transit"><img src="./bus.png" alt="icon_bus"><br>En transport</button>
-  <button id="route-button-bike"><img src="./bike.png" alt="icon_bike"><br>En 2 Roues</button>
-  <button id="route-button-walk"><img src="./walk.png" alt="icon_walk"><br>A pied</button>
+
+  <div class="buttons">
+    <button id="route-button-car">
+      <img src="car.png" alt=""><br>Voiture
+    </button>
+
+    <button id="route-button-transit">
+      <img src="bus.png" alt=""><br>Transport
+    </button>
+
+    <button id="route-button-bike">
+      <img src="bike.png" alt=""><br>Vélo
+    </button>
+
+    <button id="route-button-walk">
+      <img src="walk.png" alt=""><br>À pied
+    </button>
+  </div>
+
   <div id="map"></div>
-  <div class="info-box" id="time-info">
-    <h3>Temps de trajet</h3>
-    <p id="time-text">-</p>
-  </div>
-  <div class="info-box" id="traffic-info">
-    <h3>Etat du trafic</h3>
-    <p id="traffic-text">-</p>
-  </div>
-  <div class="info-box" id="transit-info">
-    <h3>Horaires de transport en commun</h3>
-    <p id="transit-text">-</p>
-  </div>
-  <script src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap" async defer></script>
-  <script src="script.js"></script>
+
+  <div id="transit-info"></div>
+
   <footer>
-    &copy; Geolook by Jock 2023
+    © GeoLook by Jock – 2023
   </footer>
+
+  <!-- Google Maps -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBA4ONxjKbF_2UZoC4zkEoSVLnYbRH944g&callback=initMap" async defer></script>
+
+  <!-- Ton script -->
+  <script src="script.js"></script>
+
 </body>
 </html>

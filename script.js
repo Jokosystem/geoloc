@@ -1,160 +1,146 @@
-var map;
-var geocoder;
-var directionsService;
-var directionsRenderer;
+let map;
+let geocoder;
+let directionsService;
+let directionsRenderer;
 
-// Fonction d'initialisation de la carte
+// ============================
+// INITIALISATION
+// ============================
 function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: { lat: 48.858844, lng: 2.294351 }, // Coordonnées par défaut
-    zoom: 15 // Niveau de zoom initial
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: 48.858844, lng: 2.294351 },
+    zoom: 14
   });
 
   geocoder = new google.maps.Geocoder();
   directionsService = new google.maps.DirectionsService();
-  directionsRenderer = new google.maps.DirectionsRenderer();
+  directionsRenderer = new google.maps.DirectionsRenderer({ map });
 
-  directionsRenderer.setMap(map);
-
-  // Récupérer l'adresse saisie par l'utilisateur lorsqu'il appuie sur la touche "Entrée"
-  document.getElementById('address-input').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-      geocodeAddress();
-    }
-  });
+  setupEvents();
+  const trafficLayer = new google.maps.TrafficLayer();
+trafficLayer.setMap(map);
 }
 
-// Fonction pour géocoder l'adresse saisie par l'utilisateur
-function geocodeAddress() {
-  var address = document.getElementById('address-input').value;
-
-  geocoder.geocode({ 'address': address }, function (results, status) {
-    if (status === 'OK') {
-      map.setCenter(results[0].geometry.location);
-      var marker = new google.maps.Marker({
-        map: map,
-        position: results[0].geometry.location,
-        title: 'Adresse trouvée'
-      });
-    } else {
-      alert('Impossible de trouver l\'adresse : ' + status);
-    }
+// ============================
+// EVENTS
+// ============================
+function setupEvents() {
+  document.getElementById("address-input").addEventListener("keypress", e => {
+    if (e.key === "Enter") geocodeAddress();
   });
+
+  document.getElementById("locate-button").addEventListener("click", locateUser);
+  document.getElementById("route-button-car").addEventListener("click", () => calculateRoute("DRIVING"));
+  document.getElementById("route-button-walk").addEventListener("click", () => calculateRoute("WALKING"));
+  document.getElementById("route-button-bike").addEventListener("click", () => calculateRoute("BICYCLING"));
+  document.getElementById("route-button-transit").addEventListener("click", () => calculateRoute("TRANSIT"));
 }
 
-// Bouton de localisation
-  var locateButton = document.getElementById('locate-button');
-  locateButton.addEventListener('click', function () {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        var userLocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        map.setCenter(userLocation);
-        var marker = new google.maps.Marker({
-          map: map,
-          position: userLocation,
-          title: 'Vous etes ici'
-        });
-      }, function () {
-        alert("Impossible de recuperer votre position actuelle.");
-      });
-    } else {
-      alert("La geolocalisation n'est pas prise en charge par ce navigateur.");
-    }
-  });
-
-  // Bouton d'itinéraire en voiture
-  var routeButtonCar = document.getElementById('route-button-car');
-  routeButtonCar.addEventListener('click', function () {
-    calculateRoute('DRIVING');
-  });
-
-  // Bouton d'itinéraire à pied
-  var routeButtonWalk = document.getElementById('route-button-walk');
-  routeButtonWalk.addEventListener('click', function () {
-    calculateRoute('WALKING');
-  });
-
-  // Bouton d'itinéraire à vélo
-  var routeButtonBike = document.getElementById('route-button-bike');
-  routeButtonBike.addEventListener('click', function () {
-    calculateRoute('BICYCLING');
-  });
-
-  // Bouton d'itinéraire en transports en commun
-  var routeButtonTransit = document.getElementById('route-button-transit');
-  routeButtonTransit.addEventListener('click', function () {
-    calculateRoute('TRANSIT');
-  });
-
-  
-
-// Fonction pour calculer l'itinéraire avec différentes options de voyage
-function calculateRoute(travelMode) {
-  var start = null;
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      start = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      var end = document.getElementById('address-input').value;
-
-      var request = {
-        origin: start,
-        destination: end,
-        travelMode: travelMode
-      };
-
-      directionsService.route(request, function (result, status) {
-        if (status == 'OK') {
-          directionsRenderer.setDirections(result);
-        } else {
-          alert('Impossible de calculer l\'itineraire : ' + status);
-        }
-      });
-    }, function () {
-      alert("Impossible de recuperer votre position actuelle.");
-    });
-  } else {
-    alert("La geolocalisation n'est pas prise en charge par ce navigateur.");
+// ============================
+// GEOLOCALISATION
+// ============================
+function locateUser() {
+  if (!navigator.geolocation) {
+    alert("La géolocalisation n’est pas supportée.");
+    return;
   }
+
+  navigator.geolocation.getCurrentPosition(pos => {
+    const userLocation = {
+      lat: pos.coords.latitude,
+      lng: pos.coords.longitude
+    };
+
+    map.setCenter(userLocation);
+    new google.maps.Marker({ map, position: userLocation, title: "Vous êtes ici" });
+  });
 }
 
+// ============================
+// GEOCODAGE
+// ============================
+function geocodeAddress() {
+  const address = document.getElementById("address-input").value;
 
-const mysql = require('mysql');
+  geocoder.geocode({ address }, (results, status) => {
+    if (status === "OK") {
+      map.setCenter(results[0].geometry.location);
+      new google.maps.Marker({
+        map,
+        position: results[0].geometry.location
+      });
+    } else {
+      alert("Adresse introuvable : " + status);
+    }
+  });
+}
 
-// Configurer les informations de connexion à la base de données
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'geoloc'
+// ============================
+// ITINERAIRES
+// ============================
+function calculateRoute(mode) {
+  if (!navigator.geolocation) {
+    alert("Géolocalisation non supportée.");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(pos => {
+    const start = {
+      lat: pos.coords.latitude,
+      lng: pos.coords.longitude
+    };
+
+    const end = document.getElementById("address-input").value;
+
+    const request = {
+      origin: start,
+      destination: end,
+      travelMode: google.maps.TravelMode[mode]
+    };
+
+    if (mode === "TRANSIT") {
+      request.transitOptions = {
+        departureTime: new Date(),
+        modes: ["BUS", "SUBWAY", "TRAIN", "TRAM"],
+        routingPreference: "FEWER_TRANSFERS"
+      };
+    }
+
+    directionsService.route(request, (result, status) => {
+      if (status === "OK") {
+        directionsRenderer.setDirections(result);
+        if (mode === "TRANSIT") displayTransitInfo(result);
+      } else {
+        alert("Erreur itinéraire : " + status);
+      }
+    });
+  });
+}
+
+// ============================
+// HORAIRES TRANSPORT
+// ============================
+function displayTransitInfo(result) {
+  const container = document.getElementById("transit-info");
+  container.innerHTML = "";
+
+  const steps = result.routes[0].legs[0].steps;
+
+  steps.forEach(step => {
+    if (step.travel_mode === "TRANSIT") {
+      const t = step.transit;
+      container.innerHTML += `
+        <div class="line">
+          <strong>${t.line.name}</strong><br>
+          ${t.departure_stop.name} → ${t.arrival_stop.name}<br>
+          ⏰ ${t.departure_time.text} - ${t.arrival_time.text}
+        </div><hr>
+      `;
+    }
+  });
+}
+
+result.routes.forEach(route => {
+  const time = route.legs[0].duration.value; // en secondes
+  const transfers = route.legs[0].steps.filter(s => s.travel_mode === "TRANSIT").length;
 });
-
-// Se connecter à la base de données
-connection.connect((err) => {
-  if (err) throw err;
-  console.log('Connecté à la base de données MySQL');
-});
-
-// Exemple d'insertion de données dans la table "locations"
-const latitude = 48.858844;
-const longitude = 2.294351;
-const adresse = 'Paris, France';
-
-const sql = 'INSERT INTO locations (latitude, longitude, adresse) VALUES (?, ?, ?)';
-const values = [latitude, longitude, adresse];
-
-connection.query(sql, values, (err, result) => {
-  if (err) throw err;
-  console.log('Données insérées avec succès !');
-});
-
-// Fermer la connexion à la base de données
-connection.end((err) => {
-  if (err) throw err;
-  console.log('Déconnecté de la base de données MySQL');
-});
-
-
-
