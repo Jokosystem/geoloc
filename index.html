@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2196f3">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <meta charset="UTF-8">
-  <title>GeoLook by Jock</title>
+  <title>GeoLook PRO</title>
 
   <style>
     body {
@@ -13,41 +19,20 @@
       text-align: center;
     }
 
-    h1 {
-      font-size: 80px;
-      margin: 20px 0 10px;
-    }
-
-    h2 {
-      margin: 10px 0;
-      color: aliceblue;
-    }
-
-    details {
-      font-size: 14px;
-      margin-bottom: 15px;
-    }
-
-    img {
-        color: black;
-      width: 28px;
-      height: 28px;
-      margin-bottom: 5px;
-    }
+    h1 { font-size: 60px; margin: 15px 0; }
+    h2 { margin: 10px 0; }
 
     #controls {
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
 
     #address-input {
-      width: 60%;
+      width: 80%;
       max-width: 400px;
       padding: 10px;
-      border: 2px solid #2196f3;
       border-radius: 6px;
+      border: 2px solid #2196f3;
       text-align: center;
-      font-size: 16px;
-      margin: 10px 0;
     }
 
     .buttons {
@@ -55,107 +40,92 @@
       justify-content: center;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 75px;
+      margin: 10px;
     }
 
     button {
       background: white;
-      border: 2px solid #2196f3;
+      border: 1px solid #2196f3;
       border-radius: 8px;
-      padding: 10px 15px;
+      padding: 10px;
       cursor: pointer;
       min-width: 120px;
     }
 
     button:hover {
       background: #2196f3;
+      color: white;
     }
 
     #map {
       width: 98%;
-      height: 800px;
+      height: 600px;
       margin: 10px auto;
       border: 3px solid #2196f3;
       border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.5);
     }
 
-    #transit-info {
+    #drone-info {
       max-width: 600px;
-      margin: 15px auto;
-      background: rgba(0,0,0,0.7);
-      padding: 15px;
-      border-radius: 10px;
-      font-size: 14px;
-    }
-
-    .line {
-      margin-bottom: 8px;
-    }
-
-    footer {
-      margin-top: 15px;
+      margin: 10px auto;
       padding: 10px;
-      font-size: 20px;
-      opacity: 0.8;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.8);
+      border-left: 5px solid #2196f3;
     }
+
+    .safe { border-left-color: green; }
+    .warning { border-left-color: orange; }
+    .danger { border-left-color: red; }
+
   </style>
 </head>
 
 <body>
 
-  <h1>GeoLook</h1>
-  <h2>Localisez-vous puis entrez une destination</h2>
+<h1>GeoLook PRO</h1>
+<h2>Carte drone + NOTAM + IGN</h2>
 
-  <details>
-    <summary>Comment ça marche</summary>
-    Cliquez sur "Me localiser", puis entrez votre destination pour obtenir un itinéraire.
-  </details>
+<!-- CONTROLS -->
+<div id="controls">
 
-  <div id="controls">
-    <button id="locate-button">
-      <img src="location.png" alt="">
-      <br>Me localiser
-    </button>
+  <button id="locate-button">📍 Me localiser</button>
 
-    <br>
+  <br><br>
 
-    <input id="address-input" type="text" placeholder="Entrez une adresse ou une destination">
-  </div>
+  <input id="address-input" type="text"
+         placeholder="Adresse ou destination">
 
-  <h2>Mode de transport</h2>
+</div>
 
-  <div class="buttons">
-    <button id="route-button-car">
-      <img src="car.png" alt=""><br>Voiture
-    </button>
+<!-- TRANSPORT -->
+<div class="buttons">
+  <button id="route-button-car">🚗 Voiture</button>
+  <button id="route-button-transit">🚌 Transport</button>
+  <button id="route-button-bike">🚲 Vélo</button>
+  <button id="route-button-walk">🚶 Pied</button>
+</div>
 
-    <button id="route-button-transit">
-      <img src="bus.png" alt=""><br>Transport
-    </button>
+<!-- DRONE -->
+<div class="buttons">
+  <button id="check-drone">🚁 Check drone</button>
+</div>
 
-    <button id="route-button-bike">
-      <img src="bike.png" alt=""><br>Vélo
-    </button>
+<!-- MAP -->
+<div id="map"></div>
 
-    <button id="route-button-walk">
-      <img src="walk.png" alt=""><br>À pied
-    </button>
-  </div>
+<!-- DRONE INFO -->
+<div id="drone-info"></div>
 
-  <div id="map"></div>
+<footer>GeoLook PRO – DJI style</footer>
 
-  <div id="transit-info"></div>
+<!-- GOOGLE MAPS (FIX IMPORTANT) -->
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBA4ONxjKbF_2UZoC4zkEoSVLnYbRH944g&libraries=geometry&callback=initMap"
+  async defer>
+</script>
 
-  <footer>
-    © GeoLook by Jock – 2023
-  </footer>
-
-  <!-- Google Maps -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBA4ONxjKbF_2UZoC4zkEoSVLnYbRH944g&callback=initMap" async defer></script>
-
-  <!-- Ton script -->
-  <script src="script.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
