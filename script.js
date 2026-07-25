@@ -121,23 +121,44 @@ function calculateRoute(mode) {
 // HORAIRES TRANSPORT
 // ============================
 function displayTransitInfo(result) {
-  const container = document.getElementById("transit-info");
-  container.innerHTML = "";
 
-  const steps = result.routes[0].legs[0].steps;
+    const container = document.getElementById("transit-info");
+    container.innerHTML = "";
 
-  steps.forEach(step => {
-    if (step.travel_mode === "TRANSIT") {
-      const t = step.transit;
-      container.innerHTML += `
-        <div class="line">
-          <strong>${t.line.name}</strong><br>
-          ${t.departure_stop.name} → ${t.arrival_stop.name}<br>
-          ⏰ ${t.departure_time.text} - ${t.arrival_time.text}
-        </div><hr>
-      `;
-    }
-  });
+    const steps = result.routes[0].legs[0].steps;
+
+    steps.forEach(step => {
+
+        if (step.travel_mode !== "TRANSIT") return;
+
+        const t = step.transit;
+
+        const line =
+            t.line.short_name ||
+            t.line.name ||
+            t.line.vehicle?.name ||
+            "Transport";
+
+        const color = t.line.color ? "#" + t.line.color : "#ffffff";
+
+        container.innerHTML += `
+            <div class="line">
+                <strong style="color:${color}">
+                    ${line}
+                </strong><br>
+
+                ${t.departure_stop.name}
+                →
+                ${t.arrival_stop.name}<br>
+
+                🕒 ${t.departure_time.text}
+                -
+                ${t.arrival_time.text}
+            </div>
+            <hr>
+        `;
+    });
+
 }
 
 result.routes.forEach(route => {
